@@ -1,104 +1,312 @@
-/* CSS Variables for Theme Management */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Smart Notes — Global Stylesheet
+   Theme: Light  |  Accents: #3b82f6 (blue) · #06b6d4 (cyan)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─── CSS Design Tokens ──────────────────────────────────────────────────── */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  /* Brand palette */
+  --color-primary:       #3b82f6;   /* blue-500  */
+  --color-primary-dark:  #2563eb;   /* blue-600  */
+  --color-primary-light: #dbeafe;   /* blue-100  */
+  --color-accent:        #06b6d4;   /* cyan-500  */
+  --color-accent-dark:   #0891b2;   /* cyan-600  */
+  --color-success:       #06b6d4;
+  --color-error:         #ef4444;   /* red-500   */
+  --color-error-light:   #fee2e2;   /* red-100   */
+
+  /* Neutral palette */
+  --color-bg:            #f9fafb;   /* gray-50   */
+  --color-surface:       #ffffff;
+  --color-border:        #e5e7eb;   /* gray-200  */
+  --color-text:          #111827;   /* gray-900  */
+  --color-text-muted:    #6b7280;   /* gray-500  */
+  --color-text-faint:    #9ca3af;   /* gray-400  */
+
+  /* Spacing / Shape */
+  --radius-sm:    6px;
+  --radius-md:    8px;
+  --radius-lg:    12px;
+  --radius-xl:    16px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-md:  0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg:  0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
+/* ─── Reset / Base ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-.App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+html {
+  font-size: 16px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Application Shell ──────────────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background: var(--color-bg);
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.app-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* ─── Main Content Area ──────────────────────────────────────────────────── */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+/* Sub-header */
+.content-header {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.content-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.content-count {
+  font-size: 13px;
+  color: var(--color-text-faint);
+}
+
+/* ─── Active Tag Pill (mobile) ───────────────────────────────────────────── */
+.active-tag-pill {
+  display: none; /* shown only on mobile */
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: var(--color-primary-light);
+  color: var(--color-primary-dark);
+  border-radius: 20px;
+  padding: 4px 10px 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.active-tag-clear {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--color-primary-dark);
+  padding: 2px 4px;
+  border-radius: 50%;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.active-tag-clear:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+@media (max-width: 768px) {
+  .active-tag-pill {
+    display: flex;
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
+/* ─── Notes Grid ─────────────────────────────────────────────────────────── */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+/* ─── Loading State ──────────────────────────────────────────────────────── */
+.notes-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+  gap: 16px;
+  padding: 64px 16px;
+  color: var(--color-text-muted);
+  font-size: 14px;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ─── Error State ────────────────────────────────────────────────────────── */
+.notes-error {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--color-error-light);
+  color: #991b1b;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ─── Empty State ────────────────────────────────────────────────────────── */
+.notes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 16px;
+  text-align: center;
+  gap: 12px;
+}
+
+.notes-empty-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.notes-empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.notes-empty-sub {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin: 0 0 8px;
+  max-width: 320px;
+}
+
+/* ─── Pagination ─────────────────────────────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.pagination-info {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Shared Button System
+   ═══════════════════════════════════════════════════════════════════════════ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
   font-size: 14px;
   font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s, opacity 0.15s;
+  white-space: nowrap;
+  text-decoration: none;
+  line-height: 1;
+  outline-offset: 2px;
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
+.btn:active { transform: translateY(1px); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+/* Primary */
+.btn-primary {
+  background: var(--color-primary);
+  color: #ffffff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
 }
 
-.theme-toggle:active {
-  transform: translateY(0);
+/* Secondary */
+.btn-secondary {
+  background: #f3f4f6;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Danger */
+.btn-danger {
+  background: var(--color-error);
+  color: #ffffff;
+}
+.btn-danger:hover:not(:disabled) {
+  background: #dc2626;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+}
+
+/* Ghost */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+.btn-ghost:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: var(--color-text);
+}
+
+/* Size modifiers */
+.btn-sm  { padding: 6px 12px; font-size: 13px; }
+.btn-xs  { padding: 3px 8px;  font-size: 12px; border-radius: 5px; }
+.btn-lg  { padding: 12px 24px; font-size: 15px; }
+
+/* ─── Responsive adjustments ─────────────────────────────────────────────── */
+@media (max-width: 600px) {
+  .main-content {
+    padding: 16px 12px;
   }
-  to {
-    transform: rotate(360deg);
-  }
-}
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
+  .content-title {
+    font-size: 18px;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr;
   }
 }
